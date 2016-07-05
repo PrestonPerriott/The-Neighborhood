@@ -1,0 +1,67 @@
+[
+ {
+ "imageFilename": "Williamsburg.png",
+ "size": 1,
+ "title": "Segud"
+ },
+ {
+ "imageFilename": "Midtown_East.png",
+ "size": 0,
+ "title": "What now?"
+ },
+ {
+ "imageFilename": "Dumbo.png",
+ "size": 2,
+ "title": "San Diego"
+ },
+ {
+ "imageFilename": "MidTown_West.png",
+ "size": 1,
+ "title": "Hope"
+ },
+ {
+ "imageFilename": "Lower_West.png",
+ "size": 1,
+ "title": "Graffiti"
+ },
+ {
+ "imageFilename": "Tribeca.png",
+ "size": 1,
+ "title": "New T-Shirt"
+ },
+ {
+ "imageFilename": "SoHo.png",
+ "size": 2,
+ "title": "San Francisco"
+ },
+ {
+ "imageFilename": "Upper_West.png",
+ "size": 2,
+ "title": "San Francisco"
+ },
+ {
+ "imageFilename": "Lower_East.png",
+ "size": 3,
+ "title": "SFO"
+ }
+ "imageFilename": "Upper_East.png",
+ "size": 1,
+ "title": "New T-Shirt"
+ },
+ {
+ "imageFilename": "Chelsea.png",
+ "size": 2,
+ "title": "San Francisco"
+ },
+ {
+ "imageFilename": "NoHo.png",
+ "size": 2,
+ "title": "San Francisco"
+ },
+ {
+ "imageFilename": "Financial_District.png",
+ "size": 3,
+ "title": "SFO"
+ }
+
+ ]
