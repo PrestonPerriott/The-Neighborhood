@@ -12,6 +12,8 @@
 #import "CNPPopupController.h"
 #import "Options.h"
 #import "Zones.h"
+#import "CollectionListViewController.h"
+
 
 
 
@@ -35,7 +37,7 @@
     // Do any additional setup after loading the view.
     // [self.sideMenuViewController presentRightMenuViewController]; self.tableView = ({
     self.tableView = ({
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height - 54 * 5) / 2.0f, self.view.frame.size.width, 54 * 5) style:UITableViewStylePlain];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height - 54 * 1.5) / 2.0f, self.view.frame.size.width, 54 * 5) style:UITableViewStylePlain];
     tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
     tableView.delegate = self;
     tableView.dataSource = self;
@@ -63,21 +65,36 @@
     Zones *thing = [[Zones alloc]init];
     UINavigationController *navCont = [[UINavigationController alloc]initWithRootViewController:thing];
     
+    
+    _client = [[BUYClient alloc] initWithShopDomain:@"ilovetheneighborhood.myshopify.com"
+                                             apiKey:@"0806b7bca7596aa2e6e696ac4a23a67f"
+                                          channelId:@"59355457"];
+
+    Options *Products = [[Options alloc] initWithClient:_client];
+    UINavigationController *ProductCont = [[UINavigationController alloc] initWithRootViewController:Products];
+    
+    CollectionListViewController *ListController = [[CollectionListViewController alloc] init];
+    
+    UINavigationController *ListNav = [[UINavigationController alloc] initWithRootViewController:ListController];
+    
+    
     switch (indexPath.row) {
             
         case 0:
+            
+            [self presentViewController:ListNav animated:YES completion:^{NSLog(@"Collection List Pushed");}];
             break;
         case 1:
-            [self presentViewController:navCont animated:YES completion:^{NSLog(@"CollectionView");}];
+            [self.sideMenuViewController presentHoneyMenuViewController];
+            //[self.sideMenuViewController setContentViewController:navCont  animated:YES];
+           // [self presentViewController:navCont animated:YES completion:^{NSLog(@"CollectionView");}];
             break;
         case 2:
-            NSLog(@"Pop Up Initiated");
-            [self didPop];
-
+            [self presentViewController:ProductCont animated:YES completion:^{NSLog(@"Product View Pushed");}];
             break;
         case 3:
-            
-            
+            NSLog(@"Pop Up Initiated");
+            [self didPop];
             break;
         case 4:
                    default:
@@ -112,39 +129,46 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.backgroundColor = [UIColor clearColor];
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
+        cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Italic" size:21];
         cell.textLabel.textColor = [UIColor whiteColor];
         cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
         cell.selectedBackgroundView = [[UIView alloc] init];
     }
     
-    NSArray *titles = @[@"Home", @"Subscription", @"Profile", @"Settings", @"Log Out"];
+    NSArray *titles = @[@"Main Products", @"Subscription Zones", @"Mobile Site", @"Change Zip", @"Log Out"];
     NSArray *images = @[@"IconHome@2x.png", @"IconCalendar@2x.png", @"IconProfile@2x.png", @"IconSettings@2x.png", @"IconEmpty"];
     cell.textLabel.text = titles[indexPath.row];
     cell.imageView.image = [UIImage imageNamed:images[indexPath.row]];
+    
+    //When we change the Neighborhood sign background to white, we should change the image colors to green
+    //cell.imageView.tintColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:.7];
+    //cell.textLabel.textColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:.7];
     //cell.textLabel.textAlignment = NSTextAlignmentLeft;
     
     return cell;
 }
 -(void)didPop{
     
+    
     NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping   ;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"Now for your work and home zip codes :" attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:24], NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"So now we need your Home Zip Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-Bold" size:24], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
-    NSAttributedString *lineOne = [[NSAttributedString alloc] initWithString:@"Line One to add Text/Image" attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:18], NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *lineOne = [[NSAttributedString alloc] initWithString:@"Let's start with your Work Zip-Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-Bold" size:18], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
-    NSAttributedString *lineTwo = [[NSAttributedString alloc] initWithString:@"Line Two" attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:18],  NSForegroundColorAttributeName : [UIColor colorWithRed:0.46 green:0.8 blue:1.0 alpha:1.0],NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *lineTwo = [[NSAttributedString alloc] initWithString:@"Line Two" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-Bold" size:18],  NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.numberOfLines = 0;
     titleLabel.attributedText = title;
     
+    
     UILabel *lineOneLabel = [[UILabel alloc] init];
     lineOneLabel.numberOfLines = 0;
     lineOneLabel.attributedText = lineOne;
+    
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IconHome@2x.png"]];
     
@@ -152,33 +176,34 @@
     lineTwoLabel.numberOfLines = 0;
     lineTwoLabel.attributedText = lineTwo;
     
+    
     UIView *customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 55)];
     customView.backgroundColor = [UIColor lightGrayColor];
+    customView.layer.cornerRadius = 4;
     
     UITextField *tf = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 230, 35)];
     tf.borderStyle = UITextBorderStyleRoundedRect;
-    tf.placeholder = @"Custom Ish";
+    tf.placeholder = @"Home Zip-Code";
     [customView addSubview:tf];
     
     CNPPopupButton *button = [[CNPPopupButton alloc] initWithFrame:CGRectMake(0, 0, 200, 60)];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [button setTitle:@"Close Me" forState:UIControlStateNormal];
-    button.backgroundColor = [UIColor colorWithRed:0.46 green:0.8 blue:1.0 alpha:1.0];
-    button.layer.cornerRadius = 4;
+    button.backgroundColor = [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1];
+    button.layer.cornerRadius = 5;
     button.selectionHandler = ^(CNPPopupButton *button){
         [self.Popup dismissPopupControllerAnimated:YES];
         NSLog(@"Block for button: %@", button.titleLabel.text);
     };
-
+    
     
     self.Popup =[[CNPPopupController alloc] initWithContents:@[titleLabel, lineOneLabel, imageView, lineTwoLabel, customView, button]];
     self.Popup.theme = [CNPPopupTheme defaultTheme];
     self.Popup.delegate = self;
     [self.Popup presentPopupControllerAnimated:YES];
-   // [self showPopupWithStyle:CNPPopupStyleCentered];
     
-    
+
 }
 
 

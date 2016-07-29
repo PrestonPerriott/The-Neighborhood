@@ -18,9 +18,15 @@
 #import "TileView.h"
 #import "Zones.h"
 #import "TheNeighborhood-swift.h"
+#import "Buy.h"
+@import Firebase;
+// or #import "Firebase.h"
 
 
-
+#define SHOP_DOMAIN @"ilovetheneighborhood.myshopify.com"
+#define API_KEY @"0806b7bca7596aa2e6e696ac4a23a67f"
+#define CHANNEL_ID @"59355457"
+#define MERCHANT_ID @""
 
 @interface AppDelegate ()
 
@@ -31,11 +37,28 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [FIRApp configure];
+    
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
      self.window.backgroundColor = [UIColor whiteColor];
     
+    // Initialize the Buy SDK
+    _client = [[BUYClient alloc] initWithShopDomain:SHOP_DOMAIN
+                                                       apiKey:API_KEY
+                                                    channelId:CHANNEL_ID];
+    // Setup the views
+    Options *storeController = [[Options alloc] initWithClient:_client];
+    storeController.merchantId = MERCHANT_ID;
     
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:storeController];
+    navController.toolbarHidden = NO;
+    navController.navigationBarHidden = NO;
+    navController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+
     
     
     
@@ -47,25 +70,44 @@
     self.window.rootViewController = [self generateStandardOnboardingVC];
     //[self RootViewBackToMosaic];
     
+    
+ /*   ViewController *VC = [[ViewController alloc] init];
+    UINavigationController *VCNav = [[UINavigationController alloc] initWithRootViewController:VC];
+    self.window.rootViewController = VCNav;
+    */
+    
+    
     //After OnBoard completes, we give control of the rootVC
     //back to the SideMenu, so that the app starts
+    
+    
+    
     
     
     
     return YES;
 }
 - (OnboardingViewController *)generateStandardOnboardingVC{
-    OnboardingContentViewController *firstPage = [OnboardingContentViewController contentWithTitle:@"We are The Neighborhood" body:@"The Neighborhood aims to aid individuals in their pursuit of a greater experience in their  Neighborhood" image:[UIImage imageNamed:@"Round Neighborhood Logo 2 copy.png"] buttonText:@"Zip Code" action:^{[self didPop];}];
     
     
-    OnboardingContentViewController *secondPage = [OnboardingContentViewController contentWithTitle:@"The Neighborhood" body:@"This introduction is intended to help you better understand how to best utilize the app" image:[UIImage imageNamed:@"Round Neighborhood Logo 2 copy.png"] buttonText:@"button" action:^{[self didPop];}];
+    //A button optionmost likely isn't useful for the initial page as the user doesnt know what the zip code would be used for
+    OnboardingContentViewController *firstPage = [OnboardingContentViewController contentWithTitle:nil body:@"Here at the Neighborhood our main focus is to help you, in the pursuit of an electrifying experience in your area" image:[UIImage imageNamed:@"Round Neighborhood Logo 2 copy.png"] buttonText:nil action:^{}];
+    
+    //Honestly, as we force a pop up after the 3rd controller, this one might be a tad superfluous
+    //As is turns out, the extra pop up is a bit superfluous so..............
+    OnboardingContentViewController *secondPage = [OnboardingContentViewController contentWithTitle:@"How It Works" body:@"You simply select a Neighborhood that you either live in, or work near; and we supply you, and your friends with amazing opportunities in that community!" image:[UIImage imageNamed:@"Round Neighborhood Logo 2 copy.png"] buttonText:nil action:^{}];
     
     secondPage.movesToNextViewController =YES;
     secondPage.viewDidAppearBlock = ^{
-        [self didPop];
+      
+        //We dont wan the pop to happen after the 2nd onboard pushes to the next Controller
+        //But rather after the third VC is dismissed
+        //[self didPop];
     };
-    OnboardingContentViewController *thirdPage = [OnboardingContentViewController contentWithTitle:@"Lets begin , shall we?" body:@"Image?" image:[UIImage imageNamed:@"Round Neighborhood Logo 2 copy.png"] buttonText:@"Get Started" action:^{
+    //Only need pop up option on last and final page
+    OnboardingContentViewController *thirdPage = [OnboardingContentViewController contentWithTitle:@"Lets begin , shall we?" body:@"We can't wait to get your adventure started!" image:[UIImage imageNamed:@"Round Neighborhood Logo 2 copy.png"] buttonText:@"Get Started" action:^{
         [self handleOnboardingCompletion];
+        [self didPop];
     }];
     
     OnboardingViewController *onboardingVC = [OnboardingViewController onboardWithBackgroundImage:[UIImage imageNamed:@"street"] contents:@[firstPage, secondPage, thirdPage]];
@@ -98,19 +140,21 @@
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping   ;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"Now for your work and home zip codes :" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:24], NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"So now we jsut need your Home Zip Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:24], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
-    NSAttributedString *lineOne = [[NSAttributedString alloc] initWithString:@"Line One to add Text/Image" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18], NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *lineOne = [[NSAttributedString alloc] initWithString:@"Let's start with your Work Zip-Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
-    NSAttributedString *lineTwo = [[NSAttributedString alloc] initWithString:@"Line Two" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18],  NSForegroundColorAttributeName : [UIColor colorWithRed:0.46 green:0.8 blue:1.0 alpha:1.0],NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *lineTwo = [[NSAttributedString alloc] initWithString:@"Line Two" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18],  NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.numberOfLines = 0;
     titleLabel.attributedText = title;
     
+    
     UILabel *lineOneLabel = [[UILabel alloc] init];
     lineOneLabel.numberOfLines = 0;
     lineOneLabel.attributedText = lineOne;
+    
     
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IconHome@2x.png"]];
     
@@ -118,23 +162,27 @@
     lineTwoLabel.numberOfLines = 0;
     lineTwoLabel.attributedText = lineTwo;
     
+    
     UIView *customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 250, 55)];
     customView.backgroundColor = [UIColor lightGrayColor];
+    customView.layer.cornerRadius = 4;
+    
     
     UITextField *tf = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 230, 35)];
     tf.borderStyle = UITextBorderStyleRoundedRect;
-    tf.placeholder = @"Custom Ish";
+    tf.placeholder = @"Home Zip-Code";
     [customView addSubview:tf];
     
     CNPPopupButton *button = [[CNPPopupButton alloc] initWithFrame:CGRectMake(0, 0, 200, 60)];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [button setTitle:@"Close Me" forState:UIControlStateNormal];
-    button.backgroundColor = [UIColor colorWithRed:0.46 green:0.8 blue:1.0 alpha:1.0];
-    button.layer.cornerRadius = 4;
+    button.backgroundColor = [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1];
+    button.layer.cornerRadius = 25;
     button.selectionHandler = ^(CNPPopupButton *button){
         [self.Popup dismissPopupControllerAnimated:YES];
         NSLog(@"Block for button: %@", button.titleLabel.text);
+        [self DidSecondPop];
     };
     
     
@@ -142,6 +190,13 @@
     self.Popup.theme = [CNPPopupTheme defaultTheme];
     self.Popup.delegate = self;
     [self.Popup presentPopupControllerAnimated:YES];
+    
+}
+//Need another popUp - function that handles the Work address of the user
+-(void)DidSecondPop{
+    
+    
+    
     
 }
 -(void)handleOnboardingCompletion{
@@ -164,10 +219,13 @@
     
     TileView *TileViewController = [[TileView alloc] init];
     
+    Zones *HoneyCombVC = [[Zones alloc]init];
     
-    RESideMenu *sideMenuVC = [[RESideMenu alloc] initWithContentViewController:NavCont leftMenuViewController:LeftController rightMenuViewController:TileViewController];
     
-    sideMenuVC.backgroundImage = [UIImage imageNamed:@"Default-768-1024.png"];
+    RESideMenu *sideMenuVC = [[RESideMenu alloc] initWithContentViewController:NavCont leftMenuViewController:LeftController rightMenuViewController:TileViewController honeyMenuViewController:HoneyCombVC];
+    
+    sideMenuVC.backgroundImage = [UIImage imageNamed:@"NeighborhoodBackground.png"];
+    
     sideMenuVC.menuPreferredStatusBarStyle = 1;
     sideMenuVC.delegate = self;
     sideMenuVC.contentViewShadowColor = [UIColor blackColor];

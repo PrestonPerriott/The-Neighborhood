@@ -7,6 +7,7 @@
 //
 
 #import "Zones.h"
+#import "RESideMenu.h"
 #import "TheNeighborhood-swift.h"
 
 #define kDoubleColumnProbability 40
@@ -68,13 +69,26 @@
     
     HoneycombView *Hc = [[HoneycombView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     Hc.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
-    Hc.diameter = 90.0;
+    Hc.diameter = 150.0;
     Hc.margin = 0;
     [Hc configrationForHoneycombViewWithImages:_images2];
     
     Hc.backgroundColor = [UIColor clearColor];
     [self.view addSubview:Hc] ;
     [Hc animate:5.0];
+    
+    
+    
+    
+    
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"btn_common_back_wh@2x.png"] style:UIBarButtonItemStyleDone target:self action:@selector(Back)];
+    self.navigationItem.leftBarButtonItem = _backButton;
+    
+    
+}
+-(void)Back{
+    [self dismissViewControllerAnimated:true completion:^{[self.sideMenuViewController presentLeftMenuViewController];}];
+    
 }
 
 @end

@@ -11,5 +11,10 @@
 @interface Zones : UIViewController
 @property NSMutableArray *images;
 @property NSMutableArray *images2;
+@property (strong, nonatomic) UIBarButtonItem *backButton;
+
+@property (strong, nonatomic) UITextField *Etf;
+@property (strong, nonatomic) UITextField *Ntf;
+@property (strong, nonatomic) UITextField *Ptf;
 
 @end

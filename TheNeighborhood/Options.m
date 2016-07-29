@@ -12,106 +12,118 @@
 //Options might not even be useful in the grand scheme
 
 #import "Options.h"
+#import "Login.h"
+#import "CheckoutSelectionController.h"
 
+
+@interface Options() <BUYStoreViewControllerDelegate, CheckoutSelectionControllerDelegate>
+@property (nonatomic, copy) BUYCheckoutTypeBlock callback;
+
+
+@end
 
 
 //Going to be the Actual Tile View Page
 
 
 @implementation Options
-
-
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-       // Do any additional setup after loading the view.
-   
-   /* self.tableView = ({
-        UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, (self.view.frame.size.height - 54 * 5) / 2.0f, self.view.frame.size.width, 54 * 5) style:UITableViewStylePlain];
-        tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibl  eBottomMargin | UIViewAutoresizingFlexibleWidth;
-        tableView.delegate = self;
-        tableView.dataSource = self;
-        tableView.opaque = NO;
-        tableView.backgroundColor = [UIColor clearColor];
-        tableView.backgroundView = nil;
-        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        tableView.bounces = NO;
-        tableView;
-    });
-    [self.view addSubview:self.tableView]; */
+    // Do any additional setup after loading the view, typically from a nib.
     
+    self.delegate = self;
     
+    // Add a home button to the navigation bar
+    UIButton *button =  [UIButton buttonWithType:UIButtonTypeCustom];
+    button.tintColor = [UIColor whiteColor];
+    UIImage *buttonImage = [UIImage imageNamed:@"shop"];
+    [button setImage:[buttonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [button setFrame:CGRectMake(0, 0, 53, 31)];
+    [button addTarget:self action:@selector(goHome)forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem = rightButton;
     
+    [self loadShopWithCallback:^(BOOL success, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (success) {
+                self.title = self.shop.name;
+            }
+            else {
+                NSLog(@"Error fetching shop: %@", error.localizedDescription);
+            }
+        });
+    }];
+}
+
+- (void)goHome
+{
+    [self reloadHomePage];
+}
+
+#pragma mark - BUYStoreViewController delegate methods
+
+- (void)controller:(BUYStoreViewController *)controller shouldProceedWithCheckoutType:(BUYCheckoutTypeBlock)completionHandler
+{
+    // If ApplePay is not setup, proceed to normal checkout
+    if (self.isApplePayAvailable)
+    {
+        CheckoutSelectionController *selectionController = [[CheckoutSelectionController alloc] init];
+        selectionController.delegate = self;
+        self.callback = completionHandler;
+        
+        [self presentViewController:selectionController animated:YES completion:nil];
     }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that  mnjpan be recreated.
-}
-/* - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    switch (indexPath.row) {
-        case 0:
-                       break;
-        case 1:
-                        break;
-        default:
-            break;
+    else {
+        completionHandler(BUYCheckoutTypeNormal);
     }
 }
 
-#pragma mark -
-#pragma mark UITableView Datasource
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)controller:(BUYViewController *)controller failedToCreateCheckout:(NSError *)error
 {
-    return 54;
+    NSLog(@"Failed to create checkout: %@", error);
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)controllerFailedToStartApplePayProcess:(BUYViewController *)controller
 {
-    return 1;
+    NSLog(@"Failed to start the Apple Pay process. We weren't given an error :(");
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex
+- (void)controller:(BUYViewController *)controller failedToUpdateCheckout:(BUYCheckout *)checkout withError:(NSError *)error
 {
-    return 5;
+    NSLog(@"Failed to update checkout: %@, error: %@", checkout.token, error);
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)controller:(BUYViewController *)controller failedToGetShippingRates:(BUYCheckout *)checkout withError:(NSError *)error
 {
-    static NSString *cellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.backgroundColor = [UIColor clearColor];
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:21];
-        cell.textLabel.textColor = [UIColor whiteColor];
-        cell.textLabel.highlightedTextColor = [UIColor lightGrayColor];
-        cell.selectedBackgroundView = [[UIView alloc] init];
-    }
-    
-    NSArray *titles = @[@"More", @"Things", @"That", @"Go", @"Here"];
-   
-    cell.textLabel.text = titles[indexPath.row];
-     cell.textLabel.textAlignment = NSTextAlignmentRight;
-    
-    return cell;
+    NSLog(@"Failed to get shipping rates: %@, error: %@", checkout.token, error);
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)controller:(BUYViewController *)controller failedToCompleteCheckout:(BUYCheckout *)checkout withError:(NSError *)error
+{
+    NSLog(@"Failed to complete checkout: %@, error: %@", checkout.token, error);
 }
-*/
+
+- (void)controller:(BUYViewController *)controller didCompleteCheckout:(BUYCheckout *)checkout status:(BUYStatus)status
+{
+    NSLog(@"Did complete checkout: %@, status: %ld", checkout.token, (unsigned long)status);
+}
+
+#pragma mark - PAYSelectionController delegate
+
+- (void)checkoutSelectionControllerCancelled:(CheckoutSelectionController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)checkoutSelectionController:(CheckoutSelectionController *)controller selectedCheckoutType:(CheckoutType)checkoutType
+{
+    self.callback(checkoutType == CheckoutTypeApplePay ? BUYCheckoutTypeApplePay : BUYCheckoutTypeNormal);
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 @end
+
+
+

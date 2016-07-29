@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Buy.h"
 
 @interface LeftMenu : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (strong, nonatomic) BUYClient *client;
 @end

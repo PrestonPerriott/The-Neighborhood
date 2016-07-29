@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "RESideMenu.h"
 #import "CNPPopupController.h"
-
+#import "Buy.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, RESideMenuDelegate, CNPPopupControllerDelegate>
@@ -23,6 +23,10 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) CNPPopupController *Popup;
+@property (nonatomic, strong) CNPPopupController *Popup2;
+
+@property (nonatomic, strong) BUYClient *client;
+
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;

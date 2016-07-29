@@ -1,28 +1,22 @@
 //
-//  TileView.m
+//  ProductListViewController.m
 //  TheNeighborhood
 //
-//  Created by Preston Perriott on 7/1/16.
+//  Created by Preston Perriott on 7/12/16.
 //  Copyright © 2016 Preston Perriott. All rights reserved.
 //
 
+#import "ProductListViewController.h"
 
-//Actually the options page
-
-#import "TileView.h"
-#import "Options.h"
-#import "Buy.h"
-
-
-
-@interface TileView ()
+@interface ProductListViewController ()
 
 @end
 
-@implementation TileView
+@implementation ProductListViewController
 
 - (void)viewDidLoad {
-       // Do any additional setup after loading the view.
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
