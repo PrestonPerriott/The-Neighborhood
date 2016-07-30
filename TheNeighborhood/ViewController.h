@@ -50,8 +50,10 @@
 @property (strong, nonatomic) UIButton *RegiButton;
 @property (strong, nonatomic) UIButton *Forgot;
 
-@property (strong, nonatomic) UIImage *Bouncy;
-@property (strong, nonatomic) UIView *BouncyView;
+@property (strong, nonatomic) UIImage *Bouncy2;
+@property (strong, nonatomic) UIView *BouncyView2;
+@property (strong, nonatomic) UIImageView *BouncyImageView2;
+
 @property (strong, nonatomic) UIImageView *BouncyImageView;
 
 

@@ -62,8 +62,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    Zones *thing = [[Zones alloc]init];
-    UINavigationController *navCont = [[UINavigationController alloc]initWithRootViewController:thing];
+  //  Zones *thing = [[Zones alloc]init];
+ //   UINavigationController *navCont = [[UINavigationController alloc]initWithRootViewController:thing];
     
     
     _client = [[BUYClient alloc] initWithShopDomain:@"ilovetheneighborhood.myshopify.com"
@@ -82,7 +82,15 @@
             
         case 0:
             
-            [self presentViewController:ListNav animated:YES completion:^{NSLog(@"Collection List Pushed");}];
+            //ListController is failing when its being pushed, it might be the nav controller!!******
+            if (ListController != 0) {
+                NSLog(@"Logging before the push");
+                [self presentViewController:ListNav animated:YES completion:^{NSLog(@"Collection List Pushed");}];
+                NSLog(@"Logging after the push");
+            }else{
+                NSLog(@"error");
+                
+            }
             break;
         case 1:
             [self.sideMenuViewController presentHoneyMenuViewController];
@@ -97,6 +105,8 @@
             [self didPop];
             break;
         case 4:
+            NSLog(@"Logged Out");
+#warning Handle log out
                    default:
             break;
     }

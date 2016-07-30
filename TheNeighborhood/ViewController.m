@@ -69,27 +69,20 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width-60, self.navigationController.navigationBar.frame.size.height)];
     titleLabel.text = @"The Neighborhood";
-    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textColor = [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [titleLabel setAdjustsFontSizeToFitWidth:YES];
     titleLabel.font = [UIFont fontWithName:@"AvenirNext-Italic" size:22];
-    self.navigationItem.titleView = titleLabel;
-    
-    
-    //This block allows for varying degrees of transparency
-    
-  //  [(UIView*)[self.navigationController.navigationBar.subviews objectAtIndex:3] setAlpha:.52222222f];
-   
-    
+    //self.navigationItem.titleView = titleLabel;
     
     
     //Items tint color
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    //self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     //self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:.7];
     
     
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1];
+   // self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1];
     
     
   //tint color cant be clear if we want to see the bar button items
@@ -100,12 +93,12 @@
     
     
     
-    /*
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
                              forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     self.navigationController.navigationBar.translucent = YES;
-    */
+    
     
    
    /* [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
@@ -333,20 +326,40 @@
     [_BouncyImageView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor].active = TRUE;
     [_BouncyImageView.bottomAnchor constraintEqualToAnchor:self.SC.topAnchor constant:-3].active = TRUE;
     
+    
+    
+    _Bouncy2 = [UIImage imageNamed:@"Round Neighborhood Logo 2.png"];
+    _BouncyView2 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, _button.frame.origin.y + 70, 100, 100)];
+    _BouncyImageView2 = [[UIImageView alloc] initWithImage:_Bouncy2];
+    _BouncyImageView2.frame = _BouncyView2.bounds;
+    
+    [_BouncyView2 addSubview:_BouncyImageView2];
+    [self.view addSubview:_BouncyView2];
+    
+    
+    
+    
+    
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     UIGravityBehavior* gravityBehavior =
-    [[UIGravityBehavior alloc] initWithItems:@[self.BouncyImageView]];
+    [[UIGravityBehavior alloc] initWithItems:@[self.BouncyView2]];
     [self.animator addBehavior:gravityBehavior];
     
     UICollisionBehavior* collisionBehavior =
-    [[UICollisionBehavior alloc] initWithItems:@[self.BouncyImageView]];
+    [[UICollisionBehavior alloc] initWithItems:@[self.BouncyView2]];
     collisionBehavior.translatesReferenceBoundsIntoBoundary = YES;
     [self.animator addBehavior:collisionBehavior];
     
     UIDynamicItemBehavior *elasticityBehavior =
-    [[UIDynamicItemBehavior alloc] initWithItems:@[self.BouncyImageView]];
+    [[UIDynamicItemBehavior alloc] initWithItems:@[self.BouncyView2]];
     elasticityBehavior.elasticity = 0.7f;
     [self.animator addBehavior:elasticityBehavior];
+    
+    UIPushBehavior *pushBehavior =
+    [[UIPushBehavior alloc] initWithItems:@[self.BouncyView2] mode:UIPushBehaviorModeInstantaneous];
+    pushBehavior.pushDirection = CGVectorMake(50, 70);
+    pushBehavior.magnitude = 1.789;
+    [self.animator addBehavior:pushBehavior];
     
     
     
@@ -414,7 +427,8 @@
     }];
     
     
-    [self presentViewController:ForgotAlert animated:YES completion:^{[self dismissViewControllerAnimated:YES completion:nil];}];
+    [self presentViewController:ForgotAlert animated:YES completion:^{
+    }];
 }
 -(void)HandledSegment{
     //prints out which segmented control option was picked
@@ -436,19 +450,26 @@
     
     //If theres no valid email address, FIREBASE will immediately quit the app
     //Wanted to use an alert view to circumvent this issue, but it returns to FIREBASE prior
-    if ([_Etf.text isEqualToString:@""] || [_Ntf.text isEqualToString:@""] || [_Ptf.text isEqualToString:@""]){
+    if ([_Etf.text isEqualToString:@""] || [_Ptf.text isEqualToString:@""]){
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Entry" message:@"Please Enter Valid Name, Email and Password Fields" preferredStyle:UIAlertControllerStyleActionSheet];
         
         [self presentViewController:alert animated:YES completion:^{[self dismissViewControllerAnimated:YES completion:nil];}];
-    }
-    else if (_Ptf.text.length < 6 || _Ntf.text.length < 4){
+    
+    }else if (( _Ptf.text.length < 6) && (_Ptf.text.length > 0)){
         
-        UIAlertController *lengthAlert  = [UIAlertController alertControllerWithTitle:@"Entry Length" message:@"Either the Password or Name Fields are too short, must be at least 6 charachters" preferredStyle:UIAlertControllerStyleActionSheet];
+                            UIAlertController *lengthAlert  = [UIAlertController alertControllerWithTitle:@"Entry Length" message:@"The Password Feild is too short, entry must be at least 6 charachters" preferredStyle:UIAlertControllerStyleActionSheet];
+        
+                                    [self presentViewController:lengthAlert animated:YES completion:^{[self dismissViewControllerAnimated:YES completion:nil];}];
+    }
+    else if ((_Etf.text.length < 6) && _Etf.text.length > 0){
+        
+        
+        UIAlertController *lengthAlert  = [UIAlertController alertControllerWithTitle:@"Entry Length" message:@"The Email Feild is too short, entry must be at least 6 charachters" preferredStyle:UIAlertControllerStyleActionSheet];
         
         [self presentViewController:lengthAlert animated:YES completion:^{[self dismissViewControllerAnimated:YES completion:nil];}];
-        
-    }
+    
+                }else{
     
     [[FIRAuth auth] createUserWithEmail: _Etf.text password:_Ptf.text completion:^(FIRUser *user, NSError *error){
         
@@ -488,7 +509,8 @@
         
     }];
     
-}
+                }
+    }
 
 
 - (void)didReceiveMemoryWarning {

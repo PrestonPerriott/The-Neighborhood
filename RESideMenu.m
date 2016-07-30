@@ -76,6 +76,7 @@
     if (self.rightMenuViewStoryboardID) {
         self.rightMenuViewController = [self.storyboard instantiateViewControllerWithIdentifier:self.rightMenuViewStoryboardID];
     }
+    
 }
 #endif
 
@@ -120,15 +121,21 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (id)initWithContentViewController:(UIViewController *)contentViewController leftMenuViewController:(UIViewController *)leftMenuViewController rightMenuViewController:(UIViewController *)rightMenuViewController
+- (id)initWithContentViewController:(UIViewController *)contentViewController leftMenuViewController:(UIViewController *)leftMenuViewController rightMenuViewController:(UIViewController *)rightMenuViewController honeyMenuViewController:(UIViewController *)honeyMenuViewController
 {
     self = [self init];
     if (self) {
         _contentViewController = contentViewController;
         _leftMenuViewController = leftMenuViewController;
         _rightMenuViewController = rightMenuViewController;
+        _honeyMenuViewController = honeyMenuViewController;
+        
     }
     return self;
+}
+- (void)presentHoneyMenuViewController{
+    [self presentMenuViewContainerWithMenuViewController:self.honeyMenuViewController];
+    [self showHoneyViewController];
 }
 
 - (void)presentLeftMenuViewController
@@ -222,6 +229,14 @@
         [self.rightMenuViewController didMoveToParentViewController:self];
     }
     
+    if (self.honeyMenuViewController) {
+        [self addChildViewController:self.honeyMenuViewController];
+        self.honeyMenuViewController.view.frame = self.view.bounds;
+        self.honeyMenuViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.menuViewContainer addSubview:self.honeyMenuViewController.view];
+        [self.honeyMenuViewController didMoveToParentViewController:self];
+    }
+    
     self.contentViewContainer.frame = self.view.bounds;
     self.contentViewContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
@@ -277,6 +292,7 @@
     [self.leftMenuViewController beginAppearanceTransition:YES animated:YES];
     self.leftMenuViewController.view.hidden = NO;
     self.rightMenuViewController.view.hidden = YES;
+    self.honeyMenuViewController.view.hidden = YES;
     [self.view.window endEditing:YES];
     [self addContentButton];
     [self updateContentViewShadow];
@@ -324,6 +340,7 @@
     [self.rightMenuViewController beginAppearanceTransition:YES animated:YES];
     self.leftMenuViewController.view.hidden = YES;
     self.rightMenuViewController.view.hidden = NO;
+    self.honeyMenuViewController.view.hidden = YES;
     [self.view.window endEditing:YES];
     [self addContentButton];
     [self updateContentViewShadow];
@@ -358,6 +375,56 @@
     
     [self statusBarNeedsAppearanceUpdate];
 }
+
+
+//DO WE WANT TO MAKE HONEY VC RIGHT ADJUSTED OR LEAVE IT AS THE MENU VC*************8
+
+- (void) showHoneyViewController{
+    if (!self.honeyMenuViewController) {
+        return;
+    }
+    [self.honeyMenuViewController beginAppearanceTransition:YES animated:YES];
+    self.leftMenuViewController.view.hidden = YES;
+    self.rightMenuViewController.view.hidden = YES;
+    self.honeyMenuViewController.view.hidden = NO;
+    [self.view.window endEditing:YES];
+    [self addContentButton];
+    [self updateContentViewShadow];
+    [self resetContentViewScale];
+    
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [UIView animateWithDuration:self.animationDuration animations:^{
+        if (self.scaleContentView) {
+            self.contentViewContainer.transform = CGAffineTransformMakeScale(self.contentViewScaleValue, self.contentViewScaleValue);
+        } else {
+            self.contentViewContainer.transform = CGAffineTransformIdentity;
+        }
+        self.contentViewContainer.center = CGPointMake((UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? -self.contentViewInLandscapeOffsetCenterX : -self.contentViewInPortraitOffsetCenterX), self.contentViewContainer.center.y);
+        
+        self.menuViewContainer.alpha = !self.fadeMenuView ?: 1.0f;
+        self.contentViewContainer.alpha = self.contentViewFadeOutAlpha;
+        self.menuViewContainer.transform = CGAffineTransformIdentity;
+        if (self.scaleBackgroundImageView)
+            self.backgroundImageView.transform = CGAffineTransformIdentity;
+        
+    } completion:^(BOOL finished) {
+        [self.honeyMenuViewController endAppearanceTransition];
+        if (!self.rightMenuVisible && [self.delegate conformsToProtocol:@protocol(RESideMenuDelegate)] && [self.delegate respondsToSelector:@selector(sideMenu:didShowMenuViewController:)]) {
+            [self.delegate sideMenu:self didShowMenuViewController:self.honeyMenuViewController];
+        }
+        
+        self.visible = !(self.contentViewContainer.frame.size.width == self.view.bounds.size.width && self.contentViewContainer.frame.size.height == self.view.bounds.size.height && self.contentViewContainer.frame.origin.x == 0 && self.contentViewContainer.frame.origin.y == 0);
+        self.rightMenuVisible = self.visible;
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        [self addContentViewControllerMotionEffects];
+    }];
+    
+    [self statusBarNeedsAppearanceUpdate];
+
+    
+}
+
+
 
 - (void)hideViewController:(UIViewController *)viewController
 {

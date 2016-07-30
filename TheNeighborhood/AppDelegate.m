@@ -140,11 +140,11 @@
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping   ;
     paragraphStyle.alignment = NSTextAlignmentCenter;
     
-    NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"So now we jsut need your Home Zip Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:24], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *title = [[NSAttributedString alloc] initWithString:@"So we just need your Home Zip Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:24], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
-    NSAttributedString *lineOne = [[NSAttributedString alloc] initWithString:@"Let's start with your Work Zip-Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *lineOne = [[NSAttributedString alloc] initWithString:@"Let's start with your Home Zip-Code" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18], NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
-    NSAttributedString *lineTwo = [[NSAttributedString alloc] initWithString:@"Line Two" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18],  NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
+    NSAttributedString *lineTwo = [[NSAttributedString alloc] initWithString:@"Its that simple!" attributes:@{NSFontAttributeName : [UIFont fontWithName: @"AvenirNext-UltraLightItalic" size:18],  NSForegroundColorAttributeName : [UIColor colorWithRed:80.0/255.0 green:101.0/255.0 blue:161.0/255.0 alpha:1], NSParagraphStyleAttributeName : paragraphStyle}];
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.numberOfLines = 0;
