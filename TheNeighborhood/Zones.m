@@ -60,7 +60,7 @@
                [UIImage imageNamed:@"Financial_District.png"], nil];
     
     _images2 = [[NSMutableArray alloc] init];
-    for (NSInteger x  = 0; x < 15; x++){
+    for (NSInteger x  = 0; x < 4; x++){
         [_images2 addObjectsFromArray:_images];
     }
 }

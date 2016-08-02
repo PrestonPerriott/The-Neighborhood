@@ -76,6 +76,8 @@
 		2235D5C11D21D78C00906DFB /* CNPPopupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2235D5C01D21D78C00906DFB /* CNPPopupController.m */; };
 		2235D5C91D22EA4600906DFB /* OnboardingContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2235D5C61D22EA4600906DFB /* OnboardingContentViewController.m */; };
 		2235D5CA1D22EA4600906DFB /* OnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2235D5C81D22EA4600906DFB /* OnboardingViewController.m */; };
+		223CDE521D4FA5D700BEC094 /* AMWaveTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 223CDE4F1D4FA5D700BEC094 /* AMWaveTransition.m */; };
+		223CDE531D4FA5D700BEC094 /* AMWaveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 223CDE511D4FA5D700BEC094 /* AMWaveViewController.m */; };
 		22581C311D413110005A5B73 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22581C301D413110005A5B73 /* GoogleService-Info.plist */; };
 		228BE5621D26D74500EDB290 /* Williamsburg.png in Resources */ = {isa = PBXBuildFile; fileRef = 228BE5551D26D74500EDB290 /* Williamsburg.png */; };
 		228BE5631D26D74500EDB290 /* Midtown_East.png in Resources */ = {isa = PBXBuildFile; fileRef = 228BE5561D26D74500EDB290 /* Midtown_East.png */; };
@@ -351,6 +353,10 @@
 		2235D5C61D22EA4600906DFB /* OnboardingContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnboardingContentViewController.m; path = "../../../../Downloads/Obective-C_API's/Onboard-master/Source/OnboardingContentViewController.m"; sourceTree = "<group>"; };
 		2235D5C71D22EA4600906DFB /* OnboardingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OnboardingViewController.h; path = "../../../../Downloads/Obective-C_API's/Onboard-master/Source/OnboardingViewController.h"; sourceTree = "<group>"; };
 		2235D5C81D22EA4600906DFB /* OnboardingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OnboardingViewController.m; path = "../../../../Downloads/Obective-C_API's/Onboard-master/Source/OnboardingViewController.m"; sourceTree = "<group>"; };
+		223CDE4E1D4FA5D700BEC094 /* AMWaveTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMWaveTransition.h; path = "../../../../Downloads/AMWaveTransition-master/Source/AMWaveTransition.h"; sourceTree = "<group>"; };
+		223CDE4F1D4FA5D700BEC094 /* AMWaveTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMWaveTransition.m; path = "../../../../Downloads/AMWaveTransition-master/Source/AMWaveTransition.m"; sourceTree = "<group>"; };
+		223CDE501D4FA5D700BEC094 /* AMWaveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMWaveViewController.h; path = "../../../../Downloads/AMWaveTransition-master/Source/AMWaveViewController.h"; sourceTree = "<group>"; };
+		223CDE511D4FA5D700BEC094 /* AMWaveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMWaveViewController.m; path = "../../../../Downloads/AMWaveTransition-master/Source/AMWaveViewController.m"; sourceTree = "<group>"; };
 		22581C301D413110005A5B73 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		228BE5551D26D74500EDB290 /* Williamsburg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Williamsburg.png; path = ../../../../Downloads/City_Images/Williamsburg.png; sourceTree = "<group>"; };
 		228BE5561D26D74500EDB290 /* Midtown_East.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Midtown_East.png; path = ../../../../Downloads/City_Images/Midtown_East.png; sourceTree = "<group>"; };
@@ -709,6 +715,17 @@
 				2235D5C81D22EA4600906DFB /* OnboardingViewController.m */,
 			);
 			name = OnBoard;
+			sourceTree = "<group>";
+		};
+		223CDE4D1D4FA5A200BEC094 /* WaveTransition(TableView Slide) */ = {
+			isa = PBXGroup;
+			children = (
+				223CDE4E1D4FA5D700BEC094 /* AMWaveTransition.h */,
+				223CDE4F1D4FA5D700BEC094 /* AMWaveTransition.m */,
+				223CDE501D4FA5D700BEC094 /* AMWaveViewController.h */,
+				223CDE511D4FA5D700BEC094 /* AMWaveViewController.m */,
+			);
+			name = "WaveTransition(TableView Slide)";
 			sourceTree = "<group>";
 		};
 		228BE5521D26D6B300EDB290 /* JSON_stuff */ = {
@@ -1274,6 +1291,7 @@
 		22D24E6E1D1F0BC400753A58 /* GitHub_Imported */ = {
 			isa = PBXGroup;
 			children = (
+				223CDE4D1D4FA5A200BEC094 /* WaveTransition(TableView Slide) */,
 				22C438351D4BDC5D009F781E /* GSKStretchyHeader */,
 				228BE7151D340FC400EDB290 /* Shopify */,
 				228BE6FB1D2D7DEE00EDB290 /* MHTextField */,
@@ -1672,6 +1690,7 @@
 				228BE7FC1D34159100EDB290 /* NSDictionary+Additions.m in Sources */,
 				22D24E3F1D1F0BAB00753A58 /* ViewController.m in Sources */,
 				228BE7F71D34159100EDB290 /* BUYRuntime.m in Sources */,
+				223CDE531D4FA5D700BEC094 /* AMWaveViewController.m in Sources */,
 				228BE7E21D34159100EDB290 /* BUYProductView.m in Sources */,
 				228BE7C41D34159000EDB290 /* BUYCartLineItem.m in Sources */,
 				228BE83A1D35382D00EDB290 /* ProductListViewController.m in Sources */,
@@ -1735,6 +1754,7 @@
 				228BE7C51D34159000EDB290 /* BUYCheckout.m in Sources */,
 				228BE7E01D34159100EDB290 /* BUYProductImageCollectionViewCell.m in Sources */,
 				228BE7CC1D34159100EDB290 /* BUYGiftCard.m in Sources */,
+				223CDE521D4FA5D700BEC094 /* AMWaveTransition.m in Sources */,
 				228BE7EE1D34159100EDB290 /* BUYVariantOptionBreadCrumbsView.m in Sources */,
 				228BE7E31D34159100EDB290 /* BUYProductViewController.m in Sources */,
 				228BE7D71D34159100EDB290 /* BUYShop.m in Sources */,
