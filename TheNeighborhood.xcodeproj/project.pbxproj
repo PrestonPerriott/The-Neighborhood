@@ -525,7 +525,7 @@
 		228BE7971D34159000EDB290 /* Buy.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = Buy.modulemap; sourceTree = "<group>"; };
 		228BE7991D34159000EDB290 /* BUYAddress+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BUYAddress+Additions.h"; sourceTree = "<group>"; };
 		228BE79A1D34159000EDB290 /* BUYAddress+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "BUYAddress+Additions.m"; sourceTree = "<group>"; };
-		228BE79B1D34159000EDB290 /* BUYApplePayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUYApplePayAdditions.h; sourceTree = "<group>"; };
+		228BE79B1D34159000EDB290 /* BUYApplePayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUYApplePayAdditions.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		228BE79C1D34159000EDB290 /* BUYApplePayAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUYApplePayAdditions.m; sourceTree = "<group>"; };
 		228BE79D1D34159000EDB290 /* BUYApplePayHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUYApplePayHelpers.h; sourceTree = "<group>"; };
 		228BE79E1D34159000EDB290 /* BUYApplePayHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUYApplePayHelpers.m; sourceTree = "<group>"; };

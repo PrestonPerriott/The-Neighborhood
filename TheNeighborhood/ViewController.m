@@ -223,7 +223,7 @@
     
     [self.view addSubview:_RegiButton];
     
-    [_RegiButton addTarget:self action:@selector(RegisterPressed) forControlEvents:UIControlEventTouchUpInside];
+    [_RegiButton addTarget:self action:@selector(HandleLoginRegister) forControlEvents:UIControlEventTouchUpInside];
     
     
     [_RegiButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor].active = TRUE;
@@ -334,6 +334,7 @@
     _BouncyImageView2.frame = _BouncyView2.bounds;
     
     [_BouncyView2 addSubview:_BouncyImageView2];
+    
     [self.view addSubview:_BouncyView2];
     
     
@@ -361,61 +362,7 @@
     pushBehavior.magnitude = 1.789;
     [self.animator addBehavior:pushBehavior];
     
-    
-    
-    
 
-
-
-
-    //Need to figure out a better way to handle the email address: FIREBASE????
-  /*  CGPoint size = self.view.center;
-    _button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _button.layer.masksToBounds =YES;
-    _button.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
-    
-    _button.layer.shadowColor = [UIColor colorWithRed:(100.0f/255.0f) green:0.0 blue:0.0 alpha:1.0].CGColor;
-    _button.layer.shadowOffset = CGSizeMake(5, 5.0);
-       _button.frame = CGRectMake(size.x - 365.0 ,size.y * 1.6850, 720, 60);
-    _button.center = CGPointMake(_button.center.x, _button.center.y - 12 );
-    _button.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
-    _button.font = [UIFont fontWithName:@"Arial-BoldMT" size:25];
-    [_button setTitle:@"Login" forState:UIControlStateNormal];
-    [_button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [_button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _button.titleLabel.alpha = .5;
-    _button.layer.shadowColor = [UIColor orangeColor].CGColor;
-    _button.layer.shadowOpacity = 1.0;
-    _button.layer.shadowRadius = 5;
-    _button.layer.borderWidth = 1.0;
-    _button.layer.cornerRadius = 2.0;
-    //[self.view addSubview:_button];
-    [_button addTarget:self action:@selector(didPushLogin) forControlEvents:UIControlEventTouchUpInside];
-    _button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _button2.layer.masksToBounds =YES;
-    _button2.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:139.0/255.0 blue:34.0/255.0 alpha:1.0];
-    //_button2.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:127.0/255.0 blue:80.0/255.0 alpha:1.0];
-    _button2.layer.shadowColor = [UIColor colorWithRed:(100.0f/255.0f) green:0.0 blue:0.0 alpha:1.0].CGColor;
-    
-    _button2.layer.shadowOffset = CGSizeMake(5, 5.0);
-    _button2.frame = CGRectMake(_button.frame.origin.x, _button.frame.origin.y + 59, 720, 60);
-    _button2.font = [UIFont fontWithName:@"Arial-BoldMT" size:25];
-    [_button2 setTitle:@"Sign Up" forState:UIControlStateNormal];
-    [_button2 setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [_button2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _button2.titleLabel.alpha = .5;
-    _button2.layer.shadowColor = [UIColor orangeColor].CGColor;
-    _button2.layer.shadowOpacity = 1.0;
-    _button2.layer.shadowRadius = 5;
-    _button2.layer.borderWidth = 1.0;
-    _button2.layer.cornerRadius = 2.0;
-   // [self.view addSubview:_button2];
-    [_button2 addTarget:self action:@selector(didPushSignUp) forControlEvents:UIControlEventTouchUpInside];
-                            
-    _button.alpha = .6;
-    _button2.alpha = .6;
-   */           
-    
 }
 -(void)ForgotPressed{
     
@@ -445,12 +392,60 @@
     _NameContraint.constant = _SC.selectedSegmentIndex == 1 ? 50 : 0;
     
 }
+-(void)HandleLoginRegister{
+    //if the selected index is on login, handle an old user
+    if (_SC.selectedSegmentIndex == 0) {
+        [self LoginPressed];
+    }
+    else{ //Else, register a new user
+        [self RegisterPressed];
+    }
+    
+}
+-(void)LoginPressed{
+    if ([_Etf.text isEqualToString:@""] || [_Ptf.text isEqualToString:@""]){
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Entry" message:@"Please Enter Valid Name, Email and Password Fields" preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        [self presentViewController:alert animated:YES completion:^{[self dismissViewControllerAnimated:YES completion:nil];}];
+        
+    }else {
+    
+        [[FIRAuth auth]signInWithEmail:_Etf.text password:_Ptf.text completion:^(FIRUser *user, NSError *error){
+            
+            if (error != nil){
+                NSLog(@"%@",error);
+                
+                
+            }
+
+             NSLog(@"Logged In Successfully ");
+            //Once the user has logged in successfully we want everythint to dissapear
+            //So that they may see their coupons
+            [UIView animateWithDuration:1.5 delay:.5 options: UIViewAnimationOptionCurveEaseOut animations:^{
+                _inputsContainerView.alpha = 0;
+                _RegiButton.alpha = 0;
+                _SC.alpha = 0;
+                _Forgot.alpha = 0;
+                
+                
+                
+            }completion:^(BOOL finished){
+                // Do nothing
+            }];
+
+        }
+         
+         ];}
+}
+
+
 
 -(void)RegisterPressed{
     
     //If theres no valid email address, FIREBASE will immediately quit the app
     //Wanted to use an alert view to circumvent this issue, but it returns to FIREBASE prior
-    if ([_Etf.text isEqualToString:@""] || [_Ptf.text isEqualToString:@""]){
+    if ([_Etf.text isEqualToString:@""] || [_Ptf.text isEqualToString:@""] || [_Ntf.text isEqualToString:@""]){
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Invalid Entry" message:@"Please Enter Valid Name, Email and Password Fields" preferredStyle:UIAlertControllerStyleActionSheet];
         
@@ -504,13 +499,22 @@
                 NSLog(@"%@", err);
             }
             
+            [UIView animateWithDuration:1.5 delay:.5 options: UIViewAnimationOptionCurveEaseOut animations:^{
+                _inputsContainerView.alpha = 0;
+                _RegiButton.alpha = 0;
+                _SC.alpha = 0;
+                _Forgot.alpha = 0;
+                
+                
+                
+            }completion:^(BOOL finished){
+                // Do nothing
+            }];
         }];
-        
-        
     }];
-    
                 }
     }
+
 
 
 - (void)didReceiveMemoryWarning {

@@ -13,6 +13,8 @@
 #import "Options.h"
 #import "Zones.h"
 #import "CollectionListViewController.h"
+#import "Firebase.h"
+
 
 
 
@@ -106,6 +108,13 @@
             break;
         case 4:
             NSLog(@"Logged Out");
+            [[FIRAuth auth]signOut:nil];
+            
+            
+            if (!([[FIRAuth auth]currentUser] == nil)) {
+                
+                [[FIRAuth auth]signOut:nil];
+            }
 #warning Handle log out
                    default:
             break;
